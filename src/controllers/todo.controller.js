@@ -69,3 +69,17 @@ export const completeTodo = async (req, res) => {
             mensaje : "Todo no existe"
         });
 };
+
+export const deleteTodo = async (req, res) => {
+    const { id } = req.params;
+    const { rows } = await dbClient.query(
+        "DELETE FROM todos WHERE id = $1 RETURNING *",
+        [id]);
+
+    if(rows.length > 0)
+        res.status(200).json(rows[0]);
+    else
+        res.status(404).json({
+            mensaje : "Todo no existe"
+        });
+};
